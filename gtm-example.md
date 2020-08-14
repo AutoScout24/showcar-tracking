@@ -60,7 +60,8 @@ function hasGoogleAdsConsent() {
           vendorConsents.purposeConsents[1] &&
           vendorConsents.purposeConsents[2] &&
           vendorConsents.purposeConsents[3] &&
-          vendorConsents.purposeConsents[4]; 
+          vendorConsents.purposeConsents[4] &&
+          additionalVendorConsents.vendorConsents[91];
       });
     });
   } else {

@@ -51,7 +51,7 @@ function hasGoogleAdsConsent() {
       function (data, success) {
         consent = data;
       },
-      { data: { vendorId: 755 } }
+      { data: { vendorId: 10210 } }
     );
   } else if (window.__cmp && window.cmpEnabled) {
     window.__cmp('getVendorConsents', null, function (vendorConsents) {
@@ -60,8 +60,7 @@ function hasGoogleAdsConsent() {
           vendorConsents.purposeConsents[1] &&
           vendorConsents.purposeConsents[2] &&
           vendorConsents.purposeConsents[3] &&
-          vendorConsents.purposeConsents[5] &&
-          additionalVendorConsents.vendorConsents[91];
+          vendorConsents.purposeConsents[4]; 
       });
     });
   } else {

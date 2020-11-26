@@ -558,7 +558,7 @@
                 hideCmpIfNeeded();
                 trackCmpEvents();
 
-                if (tld === 'de') {
+                if (tld === 'be') {
                     loadCmpWithAbTest();
                 } else {
                     loadCmpWithoutAbTest();
@@ -604,10 +604,10 @@
                 /**
                     We take the language from the domain and path and set it for the CMP.
                     For non-core countries we always set it to 'en'.
-
+        
                     @param {string} tld - The top level domain
                     @param {string} pathname - The full page path
-                */
+                 */
                 function setCmpLanguage(tld, pathname) {
                     function guessLanguage() {
                         switch (tld) {
@@ -691,15 +691,15 @@
                         isOnPrivacyPage || // on privacy pages
                         window.self !== window.top; // inside an iframe
 
-                    var suppressDialogue = function() {
+                    var suppressDialogue = function () {
                         __tcfapi('toggleConsentTool', 2, function () {}, false);
-                    }
+                    };
 
                     if (shouldHideCmp) {
                         __tcfapi('addEventListener', 2, suppressDialogue);
 
-                        if(isOnPrivacyPage) {
-                            window.addEventListener('load', function() {
+                        if (isOnPrivacyPage) {
+                            window.addEventListener('load', function () {
                                 __tcfapi('removeEventListener', 2, suppressDialogue);
                             });
                         }
@@ -739,8 +739,9 @@
 
                 function loadCmpWithAbTest() {
                     var userId = getCookieValue('as24Visitor');
+                    var languageVariation = window.location.pathname.indexOf('/fr/') === 0 ? 'fr' : 'nl';
 
-                    fetchExperimentData(userId).then(function (data) {
+                    fetchExperimentData(userId, languageVariation).then(function (data) {
                         function sendEvent(event) {
                             var url =
                                 'https://cmp-optimizely-fs.as24-media.eu-west-1.infinity.as24.tech/sendevent/' +
@@ -756,7 +757,14 @@
                         }
 
                         function trackEventInOptimizely(cmpEvent, optimizelyEvent) {
-                            window.__tcfapi('addEventListener', 2, () => { sendEvent(optimizelyEvent); }, cmpEvent);
+                            window.__tcfapi(
+                                'addEventListener',
+                                2,
+                                () => {
+                                    sendEvent(optimizelyEvent);
+                                },
+                                cmpEvent
+                            );
                         }
 
                         trackEventInOptimizely('acceptAllButtonClicked', 'cmpAcceptAll');
@@ -788,10 +796,10 @@
                         }
 
                         var liverampIdByVariation = {
-                            variation_1: '110d886b-ed81-45b5-ae2b-716b2f723ee9',
-                            variation_2: 'c05a5065-d405-47de-875a-9bdb14d9b960',
-                            variation_3: 'b906c984-4280-47dd-a90b-a322954fc01b',
-                            variation_4: 'a7e8fb93-5f1f-4375-b321-8e998143ae61',
+                            variation_1: '207bd477-df32-4ebe-91f2-69d7feec18b2', // original BE
+                            variation_2: '316e8539-c634-4296-82d2-df11417666c7',
+                            variation_3: '8419971a-0bf8-4994-98b8-1e1686cdcdf6',
+                            variation_4: '55b58bfe-4c4d-4943-bbf3-11ec3eedc57b',
                         };
 
                         var liverampid = liverampIdByVariation[data.variation];
@@ -825,11 +833,13 @@
                     @param {string} userId
                     @return {Promise<{ data: { userid: string; variation: string; } }>}
                 */
-                function fetchExperimentData(userId) {
-                    return fetch(
-                        'https://cmp-optimizely-fs.as24-media.eu-west-1.infinity.as24.tech/activate/cmp_themes_comparison/' +
-                            userId
-                    ).then(function (r) {
+                function fetchExperimentData(userId, lang) {
+                    var optimizelyUrl = 'https://cmp-optimizely-fs.as24-media.eu-west-1.infinity.as24.tech/activate/';
+                    var befrExperimentUrl = optimizelyUrl + 'cmp_theme_comparison_befr/';
+                    var benlExperimentUrl = optimizelyUrl + 'cmp_theme_comparison_benl/';
+                    var url = lang === 'fr' ? befrExperimentUrl : benlExperimentUrl;
+
+                    return fetch(url + userId).then(function (r) {
                         return r.json();
                     });
                 }

@@ -739,7 +739,19 @@
 
                 function loadCmpWithAbTest() {
                     var userId = getCookieValue('as24Visitor');
-                    var languageVariation = window.location.pathname.indexOf('/fr/') === 0 ? 'fr' : 'nl';
+                    var languageVariationFromCookie = getCookieValue('culture').substr(0, 2);
+                    var languageVariation = '';
+
+                    // Only for the Belgium AB test
+                    if (window.location.pathname.indexOf('/fr/') === 0) {
+                        languageVariation = 'fr';
+                    } else if (window.location.pathname.indexOf('/nl/') === 0) {
+                        languageVariation = 'nl';
+                    } else if (languageVariationFromCookie) {
+                        languageVariation = languageVariationFromCookie;
+                    } else {
+                        languageVariation = 'nl';
+                    }
 
                     fetchExperimentData(userId, languageVariation).then(function (data) {
                         function sendEvent(event) {

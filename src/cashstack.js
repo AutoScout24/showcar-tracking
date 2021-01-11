@@ -17,13 +17,13 @@
     setCmpLanguage(tld, window.location.pathname);
     hideCmpIfNeeded();
     trackCmpEvents();
-    loadCmpWithoutAbTest();
+    // loadCmpWithoutAbTest();
 
-    // if (tld === 'de') {
-    //     loadCmpWithAbTest();
-    // } else {
-    //     loadCmpWithoutAbTest();
-    // }
+    if (tld === 'it') {
+        loadCmpWithAbTest();
+    } else {
+        loadCmpWithoutAbTest();
+    }
 
     /** In case we don't have a visitor id we set one. */
     function ensureVisitorId() {
@@ -240,10 +240,10 @@
             }
 
             var liverampIdByVariation = {
-                variation_1: '110d886b-ed81-45b5-ae2b-716b2f723ee9',
-                variation_2: 'c05a5065-d405-47de-875a-9bdb14d9b960',
-                variation_3: 'b906c984-4280-47dd-a90b-a322954fc01b',
-                variation_4: 'a7e8fb93-5f1f-4375-b321-8e998143ae61',
+                variation_1: '7fa21d14-bb68-4b5e-b85f-b5ae26b92696', // original IT
+                variation_2: '0ea30077-436d-4294-a85e-0af92282c3ea',
+                variation_3: 'b36f31e9-ba65-47f5-b151-66c307c999d9',
+                variation_4: '00527a4c-e2b6-4933-a80f-4e8792b153d4',
             };
 
             var liverampid = liverampIdByVariation[data.variation];
@@ -278,9 +278,10 @@
         @return {Promise<{ data: { userid: string; variation: string; } }>}
     */
     function fetchExperimentData(userId) {
-        return fetch(
-            'https://cmp-optimizely-fs.as24-media.eu-west-1.infinity.as24.tech/activate/cmp_themes_comparison/' + userId
-        ).then(function (r) {
+        var optimizelyUrl = 'https://cmp-optimizely-fs.as24-media.eu-west-1.infinity.as24.tech/activate/';
+        var experimentUrl = optimizelyUrl + 'cmp_theme_comparison_it/';
+
+        return fetch(experimentUrl + userId).then(function (r) {
             return r.json();
         });
     }

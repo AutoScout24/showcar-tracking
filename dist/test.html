@@ -557,14 +557,14 @@
                 setCmpLanguage(tld, window.location.pathname);
                 hideCmpIfNeeded();
                 trackCmpEvents();
-                loadCmpWithoutAbTest();
+                // loadCmpWithoutAbTest();
 
                 ////// Keep implementation for future A/B tests //////
-                // if (tld === 'be') {
-                //     loadCmpWithAbTest();
-                // } else {
-                //     loadCmpWithoutAbTest();
-                // }
+                if (tld === 'it') {
+                    loadCmpWithAbTest();
+                } else {
+                    loadCmpWithoutAbTest();
+                }
 
                 /** In case we don't have a visitor id we set one. */
                 function ensureVisitorId() {
@@ -741,21 +741,8 @@
 
                 function loadCmpWithAbTest() {
                     var userId = getCookieValue('as24Visitor');
-                    var languageVariationFromCookie = getCookieValue('culture').substr(0, 2);
-                    var languageVariation = '';
 
-                    // Only for the Belgium AB test
-                    if (window.location.pathname.indexOf('/fr/') === 0) {
-                        languageVariation = 'fr';
-                    } else if (window.location.pathname.indexOf('/nl/') === 0) {
-                        languageVariation = 'nl';
-                    } else if (languageVariationFromCookie) {
-                        languageVariation = languageVariationFromCookie;
-                    } else {
-                        languageVariation = 'nl';
-                    }
-
-                    fetchExperimentData(userId, languageVariation).then(function (data) {
+                    fetchExperimentData(userId).then(function (data) {
                         function sendEvent(event) {
                             var url =
                                 'https://cmp-optimizely-fs.as24-media.eu-west-1.infinity.as24.tech/sendevent/' +
@@ -810,10 +797,10 @@
                         }
 
                         var liverampIdByVariation = {
-                            variation_1: '207bd477-df32-4ebe-91f2-69d7feec18b2', // original BE
-                            variation_2: '316e8539-c634-4296-82d2-df11417666c7',
-                            variation_3: '8419971a-0bf8-4994-98b8-1e1686cdcdf6',
-                            variation_4: '55b58bfe-4c4d-4943-bbf3-11ec3eedc57b',
+                            variation_1: '7fa21d14-bb68-4b5e-b85f-b5ae26b92696', // original IT
+                            variation_2: '0ea30077-436d-4294-a85e-0af92282c3ea',
+                            variation_3: 'b36f31e9-ba65-47f5-b151-66c307c999d9',
+                            variation_4: '00527a4c-e2b6-4933-a80f-4e8792b153d4',
                         };
 
                         var liverampid = liverampIdByVariation[data.variation];
@@ -847,13 +834,11 @@
                     @param {string} userId
                     @return {Promise<{ data: { userid: string; variation: string; } }>}
                 */
-                function fetchExperimentData(userId, lang) {
+                function fetchExperimentData(userId) {
                     var optimizelyUrl = 'https://cmp-optimizely-fs.as24-media.eu-west-1.infinity.as24.tech/activate/';
-                    var befrExperimentUrl = optimizelyUrl + 'cmp_theme_comparison_befr/';
-                    var benlExperimentUrl = optimizelyUrl + 'cmp_theme_comparison_benl/';
-                    var url = lang === 'fr' ? befrExperimentUrl : benlExperimentUrl;
+                    var experimentUrl = optimizelyUrl + 'cmp_theme_comparison_it/';
 
-                    return fetch(url + userId).then(function (r) {
+                    return fetch(experimentUrl + userId).then(function (r) {
                         return r.json();
                     });
                 }

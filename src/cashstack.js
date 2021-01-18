@@ -17,13 +17,13 @@
     setCmpLanguage(tld, window.location.pathname);
     hideCmpIfNeeded();
     trackCmpEvents();
-    // loadCmpWithoutAbTest();
+    loadCmpWithoutAbTest();
 
-    if (tld === 'it') {
-        loadCmpWithAbTest();
-    } else {
-        loadCmpWithoutAbTest();
-    }
+    // if (tld === 'it') {
+    //     loadCmpWithAbTest();
+    // } else {
+    //     loadCmpWithoutAbTest();
+    // }
 
     /** In case we don't have a visitor id we set one. */
     function ensureVisitorId() {
@@ -167,7 +167,7 @@
             de: 'a7e8fb93-5f1f-4375-b321-8e998143ae61',
             es: '4411e5b3-1b15-4c38-8b0b-a1bd0a7c1c15',
             fr: 'cd417891-edbe-4abd-9417-c6a2791634e4',
-            it: '7fa21d14-bb68-4b5e-b85f-b5ae26b92696',
+            it: 'b36f31e9-ba65-47f5-b151-66c307c999d9',
             lu: 'd32b30c5-1df5-4e45-825e-1f0d7ce19b08',
             nl: '7a9273aa-bc97-4542-bed2-4ee53960a5ae',
             com: '94a59b49-b7ea-4e1c-93c9-95a65811342b',

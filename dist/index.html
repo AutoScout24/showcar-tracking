@@ -148,6 +148,7 @@
             
             var shouldHideCmp =
                 window.location.hostname === 'accounts.autoscout24.com' || // on Identity pages
+                window.location.pathname.indexOf('entry') === 1 || // on Okta login pages
                 isOnPrivacyPage || // on privacy pages
                 containsSuppressCmpAttribute || // explicit suppress directive
                 window.self !== window.top; // inside an iframe
